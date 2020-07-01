@@ -1,0 +1,9 @@
+mmdet.egg-info/
+.eggs/
+build/
+mmdet/version.py
+__pycache__
+work_dirs/
+*.so
+*.cpp
+data/coco
