@@ -28,7 +28,10 @@ class LvisDataset(CustomDataset):
         img_infos = []
         for i in self.img_ids:
             info = self.lvis.load_imgs([i])[0]
-            info['filename'] = info['file_name'].split('_')[-1]
+            if "file_name" in info:
+                info['filename'] = info['file_name'].split('_')[-1]
+            else:
+                info['filename'] = info['coco_url'].split('.org/')[-1]
             img_infos.append(info)
         return img_infos
 
