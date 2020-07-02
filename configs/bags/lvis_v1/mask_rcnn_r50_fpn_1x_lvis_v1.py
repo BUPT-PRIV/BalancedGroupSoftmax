@@ -37,9 +37,9 @@ model = dict(
         in_channels=256,
         fc_out_channels=1024,
         gs_config=dict(
-            label2binlabel='./data/lvis/label2binlabel.pt',
-            pred_slice='./data/lvis/pred_slice_with0.pt',
-            fg_split='./data/lvis/valsplit.pkl',
+            label2binlabel='./data/lvis/lvis_v1/label2binlabel.pt',
+            pred_slice='./data/lvis/lvis_v1/pred_slice_with0.pt',
+            fg_split='./data/lvis/lvis_v1/valsplit.pkl',
             others_sample_ratio=8.0,
             loss_bg=dict(
                 type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0
@@ -160,7 +160,7 @@ data = dict(
     train=dict(
         type=dataset_type,
         ann_file=data_root + 'annotations/lvis/lvis_v1_train.json',
-        img_prefix=data_root + 'images/train2017/',
+        img_prefix=data_root + 'images/',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
@@ -172,6 +172,7 @@ data = dict(
         ann_file=data_root + 'lvis_v0.5_val.json',
         img_prefix=data_root + 'images/val2017/',
         pipeline=test_pipeline))
+
 # optimizer
 optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
@@ -196,8 +197,8 @@ evaluation = dict(interval=1)
 total_epochs = 12
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/lvis_v1/gs_mask_rcnn_r50_fpn_1x_lvis_v1_caffe'
-load_from = None
+work_dir = './work_dirs/lvis_v1/mask_rcnn_r50_fpn_1x_lvis_v1'
+load_from = './data/weneed/mask_r50/mask_rcnn_r50_fpn_2x_coco.pth'
 resume_from = None
 workflow = [('train', 1)]
 

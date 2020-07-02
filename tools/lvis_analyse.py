@@ -10,7 +10,7 @@ from pycocotools.coco import COCO
 
 def get_cate_gs():
 
-    train_ann_file = './data/lvis/lvis_v0.5_train.json'
+    train_ann_file = './data/coco/annotations/lvis/lvis_v1_train.json'
     lvis_train = LVIS(train_ann_file)
     train_catsinfo = lvis_train.cats
 
@@ -38,7 +38,7 @@ def get_cate_gs():
 
     savebin = torch.from_numpy(label2binlabel)
 
-    save_path = './data/lvis/label2binlabel.pt'
+    save_path = './data/lvis/lvis_v1/label2binlabel.pt'
     torch.save(savebin, save_path)
 
     # start and length
@@ -50,7 +50,7 @@ def get_cate_gs():
         start_idx += bincount
 
     savebin = torch.from_numpy(pred_slice)
-    save_path = './data/lvis/pred_slice_with0.pt'
+    save_path = './data/lvis/lvis_v1/pred_slice_with0.pt'
     torch.save(savebin, save_path)
 
     # pdb.set_trace()
@@ -59,8 +59,8 @@ def get_cate_gs():
 
 def get_split():
 
-    train_ann_file = './data/lvis/lvis_v0.5_train.json'
-    val_ann_file = './data/lvis/lvis_v0.5_val.json'
+    train_ann_file = './data/coco/annotations/lvis/lvis_v1_train.json'
+    val_ann_file = './data/coco/annotations/lvis/lvis_v1_val.json'
 
     # For training set
     lvis_train = LVIS(train_ann_file)
@@ -93,7 +93,7 @@ def get_split():
     splits['background'] = np.zeros((1,), dtype=np.int)
     splits['all'] = np.arange(1231)
 
-    split_file_name = './data/lvis/valsplit.pkl'
+    split_file_name = './data/lvis/lvis_v1/valsplit.pkl'
     with open(split_file_name, 'wb') as f:
         pickle.dump(splits, f)
 
@@ -1186,6 +1186,7 @@ if __name__ == '__main__':
     # ana_coco_param()
     # load_checkpoint()
     # get_cate_gs()
+    get_split()
     # get_cate_weight()
 
     # get_bin_weight()
@@ -1207,6 +1208,6 @@ if __name__ == '__main__':
     # del_tail()
     # construct_data()
     # get_val()
-    count_ins()
+    # count_ins()
     # del_nondense_cls()
     # update_cls()

@@ -187,7 +187,7 @@ def main():
 
     # build the dataloader
     # TODO: support multiple images per gpu (only minor changes are needed)
-    dataset = build_dataset(cfg.data.test)
+    dataset = build_dataset(cfg.data.val)
     data_loader = build_dataloader(
         dataset,
         imgs_per_gpu=1,
@@ -222,15 +222,16 @@ def main():
         print('\nwriting results to {}'.format(args.out))
         mmcv.dump(outputs, args.out)
         eval_types = args.eval
+        path = cfg.data.val.ann_file
         if eval_types:
             print('Starting evaluate {}'.format(' and '.join(eval_types)))
             if eval_types == ['proposal_fast']:
                 result_file = args.out
-                lvis_eval(result_file, eval_types, dataset.lvis)
+                lvis_eval(path, result_file, eval_types, dataset.lvis)
             else:
                 if not isinstance(outputs[0], dict):
                     result_files = results2json(dataset, outputs, args.out)
-                    lvis_eval(result_files, eval_types, dataset.lvis)
+                    lvis_eval(path, result_files, eval_types, dataset.lvis)
                 else:
                     for name in outputs[0]:
                         print('\nEvaluating {}'.format(name))
@@ -238,7 +239,7 @@ def main():
                         result_file = args.out + '.{}'.format(name)
                         result_files = results2json(dataset, outputs_,
                                                     result_file)
-                        lvis_eval(result_files, eval_types, dataset.lvis)
+                        lvis_eval(path, result_files, eval_types, dataset.lvis)
 
     # Save predictions in the COCO json format
     if args.json_out and rank == 0:

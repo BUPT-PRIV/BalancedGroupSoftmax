@@ -8,12 +8,8 @@ from lvis import LVISEval
 from .recall import eval_recalls
 import pickle
 
-##a wrapper around LVISEval
 
-# TODO: using the config file ann path instead of a fix one.
-ANNOTATION_PATH = "./data/lvis/lvis_v0.5_val.json"
-
-def lvis_eval(result_files, result_types, lvis, max_dets=(100, 300, 1000), existing_json=None):
+def lvis_eval(path, result_files, result_types, lvis, max_dets=(100, 300, 1000), existing_json=None):
     for res_type in result_types:
         assert res_type in [
             'proposal', 'proposal_fast', 'proposal_fast_percat', 'bbox', 'segm', 'keypoints'
@@ -44,7 +40,7 @@ def lvis_eval(result_files, result_types, lvis, max_dets=(100, 300, 1000), exist
         assert result_file.endswith('.json')
 
         iou_type = 'bbox' if res_type == 'proposal' else res_type
-        lvisEval = LVISEval(ANNOTATION_PATH, result_file, iou_type)
+        lvisEval = LVISEval(path, result_file, iou_type)
         # lvisEval.params.imgIds = img_ids
         if res_type == 'proposal':
             lvisEval.params.use_cats = 0
