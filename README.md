@@ -38,7 +38,7 @@ test settings: (score_thr: 0.001) (max_per_img: 300)
 
 | Models                | bbox mAP / mask mAP |                                      Config file                                      | Pretrained Model| Train part |
 |-----------------------|:-------------------:|:-------------------------------------------------------------------------------------:|:---------------:|:----------:|
-| Bags Mask R50-FPN     |                     |                [file](configs/bags/gs_mask_rcnn_r50_fpn_1x_lvis_caffe.py)             |                 |     All    | 
+| Bags Mask R50-FPN     |                     |                [file](configs/bags/gs_mask_rcnn_r50_fpn_1x_lvis_caffe.py)             |       caffe     |     All    | 
 |                       |                     |                                                                                       |                 |            | 
 |                       |                     |                                                                                       |                 |            |
 

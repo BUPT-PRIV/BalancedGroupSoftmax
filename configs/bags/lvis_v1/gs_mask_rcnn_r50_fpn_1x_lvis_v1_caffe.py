@@ -31,7 +31,7 @@ model = dict(
         roi_layer=dict(type='RoIAlign', out_size=7, sample_num=2),
         out_channels=256,
         featmap_strides=[4, 8, 16, 32]),
-bbox_head=dict(
+    bbox_head=dict(
         type='GSBBoxHeadWith0',
         num_fcs=2,
         in_channels=256,
@@ -50,7 +50,7 @@ bbox_head=dict(
             ),
         ),
         roi_feat_size=7,
-        num_classes=1231,
+        num_classes=1204,  # v1 categories has decreased slightly (from 1230 to 1203)
         target_means=[0., 0., 0., 0.],
         target_stds=[0.1, 0.1, 0.2, 0.2],
         reg_class_agnostic=False,
@@ -67,7 +67,7 @@ bbox_head=dict(
         num_convs=4,
         in_channels=256,
         conv_out_channels=256,
-        num_classes=1231,
+        num_classes=1204,  # v1 categories has decreased slightly (from 1230 to 1203)
         loss_mask=dict(
             type='CrossEntropyLoss', use_mask=True, loss_weight=1.0)))
 # model training and testing settings
@@ -196,7 +196,7 @@ evaluation = dict(interval=1)
 total_epochs = 12
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/lvis_v1/gs_mask_rcnn_r50_fpn_1x_lvis_caffe'
+work_dir = './work_dirs/lvis_v1/gs_mask_rcnn_r50_fpn_1x_lvis_v1_caffe'
 load_from = None
 resume_from = None
 workflow = [('train', 1)]
