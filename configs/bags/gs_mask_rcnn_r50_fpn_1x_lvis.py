@@ -31,7 +31,7 @@ model = dict(
         roi_layer=dict(type='RoIAlign', out_size=7, sample_num=2),
         out_channels=256,
         featmap_strides=[4, 8, 16, 32]),
-bbox_head=dict(
+    bbox_head=dict(
         type='GSBBoxHeadWith0',
         num_fcs=2,
         in_channels=256,
@@ -156,7 +156,7 @@ test_pipeline = [
 ]
 data = dict(
     imgs_per_gpu=2,
-    workers_per_gpu=0,
+    workers_per_gpu=2,
     train=dict(
         type=dataset_type,
         ann_file=data_root + 'annotations/lvis/lvis_v0.5_train.json',
@@ -185,7 +185,7 @@ lr_config = dict(
 checkpoint_config = dict(interval=1)
 # yapf:disable
 log_config = dict(
-    interval=50,
+    interval=20,
     hooks=[
         dict(type='TextLoggerHook'),
         # dict(type='TensorboardLoggerHook')
@@ -197,7 +197,7 @@ total_epochs = 12
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 work_dir = './work_dirs/gs_mask_rcnn_r50_fpn_1x_lvis'
-load_from = './data/weneed/mask_r50/epoch_12.pth'
+load_from = './data/weneed/mask_r50/mask_rcnn_r50_fpn_1x_lvis.pth'
 resume_from = None
 workflow = [('train', 1)]
 

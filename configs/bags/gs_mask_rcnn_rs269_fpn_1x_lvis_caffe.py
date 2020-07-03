@@ -1,7 +1,7 @@
 # model settings
 model = dict(
     type='MaskRCNN',
-    pretrained=None,
+    pretrained="https://s3.us-west-1.wasabisys.com/resnest/resnest269-0cc87c48.pth",
     backbone=dict(
         type='ResNeSt',
         depth=269,
@@ -35,9 +35,9 @@ model = dict(
         in_channels=256,
         fc_out_channels=1024,
         gs_config=dict(
-            label2binlabel='./data/lvis/label2binlabel.pt',
-            pred_slice='./data/lvis/pred_slice_with0.pt',
-            fg_split='./data/lvis/valsplit.pkl',
+            label2binlabel='./data/lvis/lvis_v1/label2binlabel.pt',
+            pred_slice='./data/lvis/lvis_v1/pred_slice_with0.pt',
+            fg_split='./data/lvis/lvis_v1/valsplit.pkl',
             others_sample_ratio=8.0,
             loss_bg=dict(
                 type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0
@@ -153,8 +153,8 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    imgs_per_gpu=2,
-    workers_per_gpu=2,
+    imgs_per_gpu=1,
+    workers_per_gpu=1,
     train=dict(
         type=dataset_type,
         ann_file=data_root + 'annotations/lvis/lvis_v0.5_train.json',
@@ -183,7 +183,7 @@ lr_config = dict(
 checkpoint_config = dict(interval=1)
 # yapf:disable
 log_config = dict(
-    interval=50,
+    interval=20,
     hooks=[
         dict(type='TextLoggerHook'),
         # dict(type='TensorboardLoggerHook')
@@ -194,7 +194,7 @@ evaluation = dict(interval=1)
 total_epochs = 12
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/gs_mask_rcnn_r50_fpn_1x_lvis_caffe'
+work_dir = './work_dirs/gs_mask_rcnn_rs269_fpn_1x_lvis_caffe'
 load_from = None
 resume_from = None
 workflow = [('train', 1)]

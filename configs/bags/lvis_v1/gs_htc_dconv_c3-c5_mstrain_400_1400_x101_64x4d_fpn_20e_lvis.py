@@ -49,9 +49,9 @@ model = dict(
             in_channels=256,
             fc_out_channels=1024,
             gs_config=dict(
-                label2binlabel='./data/lvis/label2binlabel.pt',
-                pred_slice='./data/lvis/pred_slice_with0.pt',
-                fg_split='./data/lvis/valsplit.pkl',
+                label2binlabel='./data/lvis/lvis_v1/label2binlabel.pt',
+                pred_slice='./data/lvis/lvis_v1/pred_slice_with0.pt',
+                fg_split='./data/lvis/lvis_v1/valsplit.pkl',
                 others_sample_ratio=8.0,
                 loss_bg=dict(
                     type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0
@@ -88,7 +88,7 @@ model = dict(
                 ),
             ),
             roi_feat_size=7,
-            num_classes=1231,
+            num_classes=1204,  # v1 categories has decreased slightly (from 1230 to 1203)
             target_means=[0., 0., 0., 0.],
             target_stds=[0.05, 0.05, 0.1, 0.1],
             reg_class_agnostic=True,
@@ -114,7 +114,7 @@ model = dict(
                 ),
             ),
             roi_feat_size=7,
-            num_classes=1231,
+            num_classes=1204,  # v1 categories has decreased slightly (from 1230 to 1203)
             target_means=[0., 0., 0., 0.],
             target_stds=[0.033, 0.033, 0.067, 0.067],
             reg_class_agnostic=True,
@@ -283,19 +283,19 @@ data = dict(
     workers_per_gpu=1,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations/lvis/lvis_v0.5_train.json',
-        img_prefix=data_root + 'images/train2017/',
+        ann_file=data_root + 'annotations/lvis/lvis_v1_train.json',
+        img_prefix=data_root + 'images/',
         seg_prefix=data_root + 'images/stuffthingmaps/train2017/',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations/lvis/lvis_v0.5_val.json',
-        img_prefix=data_root + 'images/val2017/',
+        ann_file=data_root + 'annotations/lvis/lvis_v1_image_info_test_challenge.json',
+        img_prefix=data_root + 'images/',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations/lvis/lvis_v0.5_val.json',
-        img_prefix=data_root + 'images/val2017/',
+        ann_file=data_root + 'annotations/lvis/lvis_v1_val.json',
+        img_prefix=data_root + 'images/',
         pipeline=test_pipeline))
 # optimizer
 optimizer = dict(type='SGD', lr=0.005, momentum=0.9, weight_decay=0.0001)
@@ -310,7 +310,7 @@ lr_config = dict(
 checkpoint_config = dict(interval=1)
 # yapf:disable
 log_config = dict(
-    interval=20,
+    interval=50,
     hooks=[
         dict(type='TextLoggerHook'),
         # dict(type='TensorboardLoggerHook')
@@ -320,10 +320,10 @@ log_config = dict(
 total_epochs = 12
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/gs_htc_dconv_c3-c5_mstrain_400_1400_x101_64x4d_fpn_20e_lvis_lrdown'
-load_from = './data/weneed/htc_x101_msdcn/epoch_20.pth'
+work_dir = './work_dirs/lvis_v1/gs_htc_dconv_c3-c5_mstrain_400_1400_x101_64x4d_fpn_20e_lvis_lrdown'
+load_from = None
 resume_from = None
 workflow = [('train', 1)]
 
 # Train which part, 0 for all, 1 for cls, 2 for bbox_head, 3 for cascade cls
-selectp = 3
+selectp = 0

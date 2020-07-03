@@ -1,15 +1,12 @@
-# (0.001/300) bbox_AP/mask_AP: 20.76/20.68
 # model settings
 model = dict(
     type='MaskRCNN',
-    pretrained='torchvision://resnet50',
+    pretrained="https://s3.us-west-1.wasabisys.com/resnest/resnest269-0cc87c48.pth",
     backbone=dict(
-        type='ResNet',
-        depth=50,
-        num_stages=4,
-        out_indices=(0, 1, 2, 3),
-        frozen_stages=1,
-        style='pytorch'),
+        type='ResNeSt',
+        depth=269,
+        norm_eval=True,
+        frozen_stages=1),
     neck=dict(
         type='FPN',
         in_channels=[256, 512, 1024, 2048],
@@ -33,10 +30,23 @@ model = dict(
         out_channels=256,
         featmap_strides=[4, 8, 16, 32]),
     bbox_head=dict(
-        type='SharedFCBBoxHead',
+        type='GSBBoxHeadWith0',
         num_fcs=2,
         in_channels=256,
         fc_out_channels=1024,
+        gs_config=dict(
+            label2binlabel='./data/lvis/label2binlabel.pt',
+            pred_slice='./data/lvis/pred_slice_with0.pt',
+            fg_split='./data/lvis/valsplit.pkl',
+            others_sample_ratio=8.0,
+            loss_bg=dict(
+                type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0
+            ),
+            num_bins=5,
+            loss_bin=dict(
+                type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0
+            ),
+        ),
         roi_feat_size=7,
         num_classes=1231,
         target_means=[0., 0., 0., 0.],
@@ -152,12 +162,12 @@ data = dict(
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations/lvis/lvis_v0.5_val.json',
+        ann_file=data_root + 'annotations/lvis/lvis_v0.5_val_2017.json',
         img_prefix=data_root + 'images/val2017/',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations/lvis/lvis_v0.5_val.json',
+        ann_file=data_root + 'annotations/lvis/lvis_v0.5_val_2017.json',
         img_prefix=data_root + 'images/val2017/',
         pipeline=test_pipeline))
 # optimizer
@@ -184,7 +194,10 @@ evaluation = dict(interval=1)
 total_epochs = 12
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/mask_rcnn_r50_fpn_1x_lvis'
-load_from = None # './data/pretrained_models/mask_rcnn_r50_fpn_2x_20181010-41d35c05.pth'
+work_dir = './work_dirs/gs_mask_rcnn_rs269_fpn_1x_lvis_caffe'
+load_from = None
 resume_from = None
 workflow = [('train', 1)]
+
+# Train which part, 0 for all, 1 for cls, 2 for bbox_head
+selectp = 0
