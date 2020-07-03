@@ -428,6 +428,7 @@ class ResNet(nn.Module):
         self.block, stage_blocks = self.arch_settings[depth]
         self.stage_blocks = stage_blocks[:num_stages]
         self.inplanes = 64
+        self.width = 64
 
         self._make_stem_layer(in_channels)
 
@@ -437,7 +438,7 @@ class ResNet(nn.Module):
             dilation = dilations[i]
             dcn = self.dcn if self.stage_with_dcn[i] else None
             gcb = self.gcb if self.stage_with_gcb[i] else None
-            planes = 64 * 2**i
+            planes = self.width * 2**i
             res_layer = make_res_layer(
                 self.block,
                 self.inplanes,
@@ -460,7 +461,7 @@ class ResNet(nn.Module):
 
         self._freeze_stages()
 
-        self.feat_dim = self.block.expansion * 64 * 2**(
+        self.feat_dim = self.block.expansion * self.width * 2**(
             len(self.stage_blocks) - 1)
 
     @property
@@ -471,12 +472,12 @@ class ResNet(nn.Module):
         self.conv1 = build_conv_layer(
             self.conv_cfg,
             in_channels,
-            64,
+            self.width,
             kernel_size=7,
             stride=2,
             padding=3,
             bias=False)
-        self.norm1_name, norm1 = build_norm_layer(self.norm_cfg, 64, postfix=1)
+        self.norm1_name, norm1 = build_norm_layer(self.norm_cfg, self.width, postfix=1)
         self.add_module(self.norm1_name, norm1)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)

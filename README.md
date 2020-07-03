@@ -38,13 +38,11 @@ test settings: (score_thr: 0.001) (max_per_img: 300)
 
 |   ID   | Models                | bbox mAP / mask mAP |                                      Config file                                      | Pretrained Model| Train part |
 |--------|-----------------------|:-------------------:|:-------------------------------------------------------------------------------------:|:---------------:|:----------:|
-|(1_1)   | Bags Mask R50-FPN     |                     |                [file](configs/bags/gs_mask_rcnn_r50_fpn_1x_lvis_caffe.py)             |       caffe     |     All    | 
-|(1_2)   | Bags Mask R50-FPN     |                     |                                                                                       |     Model (19)  |     CLS    | 
-|(1_3)   |                       |                     |                                                                                       |     Model (19)  |            |
+|(1_1)   | Bags Mask R50-FPN     |    22.28/23.63      |                [file](configs/bags/gs_mask_rcnn_r50_fpn_1x_lvis_caffe.py)             |       caffe     |     All    |
 
 ##### lvis v1.0
 
 |   ID   | Models                | bbox mAP / mask mAP |                                      Config file                                      | Pretrained Model| Train part |
 |--------|-----------------------|:-------------------:|:-------------------------------------------------------------------------------------:|:---------------:|:----------:|
 | (2_1)  | Bags Mask R50-FPN     |                     |                [file](configs/bags/lvis_v1/mask_rcnn_r50_fpn_1x_lvis_v1.py)           |  COCO mask r50  |     ALL    | 
-| (2_2)  | Bags Mask R50-FPN     |                     |                [file](configs/bags/lvis_v1/gs_mask_rcnn_r50_fpn_1x_lvis_v1.py)        |  Model (2_1)    |     ALL    | 
+| (2_2)  | Bags Mask R50-FPN     |                     |                [file](configs/bags/lvis_v1/gs_mask_rcnn_r50_fpn_1x_lvis_v1.py)        |  Model (2_1)    |     CLS    | 

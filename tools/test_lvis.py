@@ -187,7 +187,7 @@ def main():
 
     # build the dataloader
     # TODO: support multiple images per gpu (only minor changes are needed)
-    dataset = build_dataset(cfg.data.val)
+    dataset = build_dataset(cfg.data.test)
     data_loader = build_dataloader(
         dataset,
         imgs_per_gpu=1,
@@ -209,6 +209,9 @@ def main():
         model.CLASSES = dataset.CLASSES
 
     model = reweight_cls(model, args.tau)
+    rank, _ = get_dist_info()
+    if rank == 0:
+        print(model)
 
     if not distributed:
         model = MMDataParallel(model, device_ids=[0])

@@ -29,6 +29,7 @@ def lvis_eval(path, result_files, result_types, lvis, max_dets=(100, 300, 1000),
         assert existing_json is not None
         per_cat_recall = {}
         for cat_id in range(1, 1231):
+            assert "v1" not in path
             ar = lvis_fast_eval_recall(result_files, lvis, np.array(max_dets), category_id=cat_id)
             for i, num in enumerate(max_dets):
                 per_cat_recall.update({cat_id:ar})

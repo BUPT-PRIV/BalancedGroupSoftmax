@@ -113,7 +113,7 @@ test_cfg = dict(
         mask_thr_binary=0.5))
 # dataset settings
 dataset_type = 'LvisDataset'
-data_root = 'data/lvis/'
+data_root = 'data/coco/'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
@@ -143,21 +143,21 @@ test_pipeline = [
 ]
 data = dict(
     imgs_per_gpu=1,
-    workers_per_gpu=2,
+    workers_per_gpu=0,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + 'lvis_v0.5_train.json',
-        img_prefix=data_root + 'train2017/',
+        ann_file=data_root + 'annotations/lvis/lvis_v0.5_train.json',
+        img_prefix=data_root + 'images/train2017/',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=data_root + 'lvis_v0.5_val.json',
-        img_prefix=data_root + 'val2017/',
+        ann_file=data_root + 'annotations/lvis/lvis_v0.5_val.json',
+        img_prefix=data_root + 'images/val2017/',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'lvis_v0.5_val.json',
-        img_prefix=data_root + 'val2017/',
+        ann_file=data_root + 'annotations/lvis/lvis_v0.5_val.json',
+        img_prefix=data_root + 'images/val2017/',
         pipeline=test_pipeline))
 # optimizer
 optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001)

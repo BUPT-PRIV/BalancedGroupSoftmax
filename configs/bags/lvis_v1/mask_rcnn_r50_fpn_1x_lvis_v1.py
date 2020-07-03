@@ -156,7 +156,7 @@ test_pipeline = [
 ]
 data = dict(
     imgs_per_gpu=2,
-    workers_per_gpu=0,
+    workers_per_gpu=2,
     train=dict(
         type=dataset_type,
         ann_file=data_root + 'annotations/lvis/lvis_v1_train.json',
@@ -165,12 +165,12 @@ data = dict(
     val=dict(
         type=dataset_type,
         ann_file=data_root + 'annotations/lvis/lvis_v1_val.json',
-        img_prefix=data_root + 'images/val2017/',
+        img_prefix=data_root + 'images/',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'lvis_v0.5_val.json',
-        img_prefix=data_root + 'images/val2017/',
+        ann_file=data_root + 'annotations/lvis/lvis_v1_val.json',
+        img_prefix=data_root + 'images/',
         pipeline=test_pipeline))
 
 # optimizer
