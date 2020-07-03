@@ -62,7 +62,7 @@ model = dict(
                 ),
             ),
             roi_feat_size=7,
-            num_classes=1231,
+            num_classes=1204,  # v1 categories has decreased slightly (from 1230 to 1203)
             target_means=[0., 0., 0., 0.],
             target_stds=[0.1, 0.1, 0.2, 0.2],
             reg_class_agnostic=True,
@@ -132,7 +132,7 @@ model = dict(
         num_convs=4,
         in_channels=256,
         conv_out_channels=256,
-        num_classes=1231,
+        num_classes=1204,  # v1 categories has decreased slightly (from 1230 to 1203)
         loss_mask=dict(
             type='CrossEntropyLoss', use_mask=True, loss_weight=1.0)),
     semantic_roi_extractor=dict(
