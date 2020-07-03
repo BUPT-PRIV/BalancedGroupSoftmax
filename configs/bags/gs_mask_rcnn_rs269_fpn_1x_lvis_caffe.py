@@ -1,14 +1,12 @@
 # model settings
 model = dict(
     type='MaskRCNN',
-    pretrained='torchvision://resnet50',
+    pretrained=None,
     backbone=dict(
-        type='ResNet',
-        depth=50,
-        num_stages=4,
-        out_indices=(0, 1, 2, 3),
-        frozen_stages=1,
-        style='pytorch'),
+        type='ResNeSt',
+        depth=269,
+        norm_eval=True,
+        frozen_stages=1),
     neck=dict(
         type='FPN',
         in_channels=[256, 512, 1024, 2048],
@@ -37,9 +35,9 @@ model = dict(
         in_channels=256,
         fc_out_channels=1024,
         gs_config=dict(
-            label2binlabel='./data/lvis/lvis_v1/label2binlabel.pt',
-            pred_slice='./data/lvis/lvis_v1/pred_slice_with0.pt',
-            fg_split='./data/lvis/lvis_v1/valsplit.pkl',
+            label2binlabel='./data/lvis/label2binlabel.pt',
+            pred_slice='./data/lvis/pred_slice_with0.pt',
+            fg_split='./data/lvis/valsplit.pkl',
             others_sample_ratio=8.0,
             loss_bg=dict(
                 type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0
@@ -50,7 +48,7 @@ model = dict(
             ),
         ),
         roi_feat_size=7,
-        num_classes=1204,  # v1 categories has decreased slightly (from 1230 to 1203)
+        num_classes=1231,
         target_means=[0., 0., 0., 0.],
         target_stds=[0.1, 0.1, 0.2, 0.2],
         reg_class_agnostic=False,
@@ -67,7 +65,7 @@ model = dict(
         num_convs=4,
         in_channels=256,
         conv_out_channels=256,
-        num_classes=1204,  # v1 categories has decreased slightly (from 1230 to 1203)
+        num_classes=1231,
         loss_mask=dict(
             type='CrossEntropyLoss', use_mask=True, loss_weight=1.0)))
 # model training and testing settings
@@ -159,20 +157,19 @@ data = dict(
     workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations/lvis/lvis_v1_train.json',
-        img_prefix=data_root + 'images/',
+        ann_file=data_root + 'annotations/lvis/lvis_v0.5_train.json',
+        img_prefix=data_root + 'images/train2017/',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations/lvis/lvis_v1_image_info_test_challenge.json',
-        img_prefix=data_root + 'images/',
+        ann_file=data_root + 'annotations/lvis/lvis_v0.5_val_2017.json',
+        img_prefix=data_root + 'images/val2017/',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'annotations/lvis/lvis_v1_val.json',
-        img_prefix=data_root + 'images/',
+        ann_file=data_root + 'annotations/lvis/lvis_v0.5_val_2017.json',
+        img_prefix=data_root + 'images/val2017/',
         pipeline=test_pipeline))
-
 # optimizer
 optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
@@ -197,10 +194,10 @@ evaluation = dict(interval=1)
 total_epochs = 12
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = './work_dirs/lvis_v1/gs_mask_rcnn_r50_fpn_1x_lvis_v1'
-load_from = './data/weneed/mask_r50/mask_rcnn_r50_fpn_1x_lvis.pth'
+work_dir = './work_dirs/gs_mask_rcnn_r50_fpn_1x_lvis_caffe'
+load_from = None
 resume_from = None
 workflow = [('train', 1)]
 
 # Train which part, 0 for all, 1 for cls, 2 for bbox_head
-selectp = 1
+selectp = 0
